@@ -1,0 +1,24 @@
+2025-11-03 20:47:08 [INFO] - 4001 - [utils.config.helper_config.__init__] - Configuraciones cargadas correctamente.
+2025-11-03 20:47:08 [INFO] - 4001 - [__main__.main] - === Iniciando extracción: 4001 (202510) ===
+2025-11-03 20:47:08 [INFO] - 4001 - [extract.extractor.run] - Configuracion del modulo extraccion: [{'type': 'file', 'properties': {'format': 'text', 'path': '/data/desa/landingzone/hadoop/interfacesUser', 'name': 'user_colaborador_transicion', 'extension': 'txt', 'delimiter': '|', 'load_encoding': 'utf-8', 'header': 'y', 'columns': 'codmes,coddoc,puesto,perfil,propuesta', 'clean': {'clean_type': 'shell-script', 'clean_process': '/data/desa/IBKProjects/DataHub/frmk4/tmp/user_colaborador_transicion/limpia_user_colaborador_transicion.sh'}, 'quality_integration': {'columns_key': 'codmes,coddoc', 'columns_critical': 'codmes,coddoc,puesto,perfil,propuesta'}, 'data_protection': {'columns_sensitive': 'coddoc,puesto', 'encryption_method': 'VOLT_SHA256'}}}]
+2025-11-03 20:47:08 [INFO] - 4001 - [utils.spark.helper_spark.get_spark_session] - Inicializando session SPARK
+2025-11-03 20:47:08 [INFO] - 4001 - [utils.spark.helper_spark.get_spark_session] - spark_configs = {'spark.ui.enabled': 'false', 'spark.sql.shuffle.partitions': '200', 'spark.sql.execution.arrow.pyspark.enabled': 'true', 'spark.driver.memory': '4g', 'spark.driver.cores': '2', 'spark.sql.session.timeZone': 'America/Lima', 'spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version': '2'}
+2025-11-03 20:47:11 [INFO] - 4001 - [utils.spark.helper_spark.get_spark_session] - SPARK inicializado
+2025-11-03 20:47:11 [INFO] - 4001 - [extract.extractor.run] - Leyendo archivo: /home/ubuntu/frmk4/tmp/inputs/DATATEST_202510.txt
+2025-11-03 20:47:18 [INFO] - 4001 - [extract.extractor.run] - Registros leídos: 99
+2025-11-03 20:47:19 [INFO] - 4001 - [security.data_protection.encrypt_dataframe] - Iniciando encrypt
+2025-11-03 20:47:19 [INFO] - 4001 - [extract.extractor.run] - === DataFrame Encriptado ===
+2025-11-03 20:47:21 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='/Rw60b9sxROhfPM3gfKZ0A==', PUESTO='Gc3g/Gp7RsEXKF4sZujvuFEM0+UrmyvzFw1YQaPOppY=', PERFIL='09. Analista', PROPUESTA='N3')
+2025-11-03 20:47:21 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='6zlU1VrWvr6BL1jzMDpILQ==', PUESTO='gyM16rGbKNFM1kG6HPR1MwdOHOOg8DVvGkpIbOeyg/Y=', PERFIL='09. Analista', PROPUESTA='N3')
+2025-11-03 20:47:21 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='D0MA2ewLEpEmfAyqCmP6pw==', PUESTO='+bTHA8twnCdx1S9GrpPS+IxSv7g7FEl+eLp541KFubs=', PERFIL='09. Analista', PROPUESTA='N3')
+2025-11-03 20:47:21 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='MRZnfUqOmRQrBJMjy9N/qQ==', PUESTO='7qj9nBzD0b6zFFKtJMXXyHy4o6LXx403Pons8rQ2ZXBiQoKSUj1assQaYtIPOY7L', PERFIL='06. Jefe', PROPUESTA='N4')
+2025-11-03 20:47:21 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='XmSjNzP6pbr/BocpVIfuPw==', PUESTO='+bTHA8twnCdx1S9GrpPS+IxSv7g7FEl+eLp541KFubs=', PERFIL='09. Analista', PROPUESTA='N3')
+2025-11-03 20:47:21 [INFO] - 4001 - [security.data_protection.decrypt_dataframe] - Iniciando decrypt
+2025-11-03 20:47:22 [INFO] - 4001 - [security.data_protection.decrypt_dataframe] - Finalizado decrypt_dataframe
+2025-11-03 20:47:22 [INFO] - 4001 - [extract.extractor.run] - === DataFrame Desencriptado ===
+2025-11-03 20:47:22 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='00000001', PUESTO='BUSINESS ANALYST 2', PERFIL='09. Analista', PROPUESTA='N3')
+2025-11-03 20:47:22 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='00000002', PUESTO='SUPERVISOR CONTROVERSIAS', PERFIL='09. Analista', PROPUESTA='N3')
+2025-11-03 20:47:22 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='00000003', PUESTO='ASISTENTE DE EXPERIENCIA IBK', PERFIL='09. Analista', PROPUESTA='N3')
+2025-11-03 20:47:22 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='00000004', PUESTO='JEFE DE GESTION RIESGO DE CREDITO', PERFIL='06. Jefe', PROPUESTA='N4')
+2025-11-03 20:47:22 [INFO] - 4001 - [extract.extractor.run] - DataFrame Row: Row(CODMES='202510', CODDOC='00000005', PUESTO='ASISTENTE DE EXPERIENCIA IBK', PERFIL='09. Analista', PROPUESTA='N3')
+2025-11-03 20:47:24 [INFO] - 4001 - [__main__.main] - Proceso completado exitosamente

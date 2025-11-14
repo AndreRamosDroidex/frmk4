@@ -1,0 +1,49 @@
+{
+	"user_developer_id": "S38371",
+	"user_technical_leader_id": "S38371",
+	"user_team": "campañas_contextuales",
+	"batch_id": "0001",
+	"process_type": "CM",
+	"email_notification": {
+		"error":"correo1@intercorp.com.pe,correo2@intercorp.com.pe,correo3@intercorp.com.pe",
+		"warning":"correo1@intercorp.com.pe",
+		"ok":"correo2@intercorp.com.pe"
+	},
+	"process_modules": [
+		{
+			"extract": [ 
+				{
+					"type": "file",
+					"properties": {
+						"format": "text",
+						"path": "/data/desa/landingzone/hadoop/interfacesUser",
+						"name": "user_colaborador_transicion",
+						"extension": "txt",
+						"delimiter": "|",
+						"header": "y",
+						"columns": "codmes,coddoc,puesto,perfil,propuesta",
+						"clean":{
+							"type":"shell_script",
+							"process":"limpia_proceso_ejemplo.sh",
+							"enabled_ind":"Y"
+						},
+						"reject":{
+							"umbral":"10",
+							"enabled_ind":"Y"
+						},
+						"quality_integration":{
+							"columns_key": "codmes,coddoc",
+							"columns_critical": "codmes,coddoc,puesto,perfil,propuesta",
+							"enabled_ind":"Y"
+						},
+						"data_protection": {
+							"name_method": "ENCRYPTION_BQG",
+							"columns_sensitive": "coddoc,puesto",
+							"enabled_ind":"Y"
+						}
+					}
+				}
+			]
+		}
+	]
+}

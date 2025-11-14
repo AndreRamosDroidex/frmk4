@@ -1,0 +1,3 @@
+2025-11-03 20:42:11 [INFO] - 4001 - [utils.config.helper_config.__init__] - Configuraciones cargadas correctamente.
+2025-11-03 20:42:11 [INFO] - 4001 - [__main__.main] - === Iniciando extracción: 4001 (202510) ===
+2025-11-03 20:42:11 [ERROR] - 4001 - [__main__.main] - Error durante la extracción: [Errno 13] Permission denied: '/data'

@@ -1,0 +1,50 @@
+{
+	"framework": "FRMK4",
+	"config_app": [
+		{
+		"name":"spark-config",
+		"properties":{ 
+					"spark.ui.enabled":"false",
+					"spark.sql.shuffle.partitions":"200",
+					"spark.sql.execution.arrow.pyspark.enabled":"true",
+					"spark.driver.memory":"4g",
+					"spark.driver.cores":"2",
+					"spark.sql.session.timeZone":"America/Lima",
+					"spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version":"2"
+					}
+		},
+		{
+		"name":"paths",
+		"properties":{ 
+					"path_data_onprem":"/home/ubuntu/frmk4/tmp/inputs/processed-onprem",
+					"path_transform_sql":"/home/ubuntu/frmk4/tmp/sql"
+					}
+		},
+		{
+		"name":"teradata-cnx-dwh-01",
+		"properties":{ 
+					"username":"D_DWH_FRMING",
+					"driver":"com.teradata.jdbc.TeraDriver",
+					"password":"XXXXXXXXXXXXX",
+					"server":"PRODIFX",
+					"database":"D_DW_LANDING",
+					"port":"1025",
+					"connection_url":"jdbc:teradata://{{server}}/DATABASE={{database}},DBS_PORT={{port}},LOB_SUPPORT=ON,CHARSET=UTF8"
+					}
+		},
+		{
+		"name":"redshift-cnx-dwh-modernizacion-01",
+		"properties":{ 
+					"username":"D_DWH_FRMING",
+					"driver":"com.teradata.jdbc.TeraDriver",
+					"password":"XXXXXXXXXXXXX",
+					"server":"PRODIFX",
+					"database":"D_DW_LANDING",
+					"port":"1025",
+					"connection_url":"jdbc:teradata://{{server}}/DATABASE={{database}},DBS_PORT={{port}},LOB_SUPPORT=ON,CHARSET=UTF8"
+					}
+		}
+	
+	]
+
+}

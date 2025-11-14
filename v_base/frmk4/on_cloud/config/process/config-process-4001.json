@@ -1,0 +1,92 @@
+{
+	"user_developer_id": "S38371",
+	"user_technical_leader_id": "S38371",
+	"user_team": "campañas_contextuales",
+	"batch_id": "0001",
+	"process_type": "CM",
+	"email_notification": {
+		"error":"correo1@intercorp.com.pe,correo2@intercorp.com.pe,correo3@intercorp.com.pe",
+		"warning":"correo1@intercorp.com.pe",
+		"ok":"correo2@intercorp.com.pe"
+	},
+	"process_modules": [
+		{
+			"transform": [
+				{
+					"transform_id":"1",
+					"transform_sql":"SELECT codmes,coddoc FROM {{SOURCE_INPUT}}"
+				},
+				{
+					"transform_id":"2",
+					"transform_sql":"perfil_transicion.sql"
+				}
+			]
+		},
+		{
+			"load": [
+				{
+					"load_type": "S3",
+					"load_properties": {
+						"bucket": "s3://interbank-datalake-dev-us-east-1-229029298957-landing/frmk4/test/data/file",
+						"name": "perfil_transicion_abc",
+						"format": "text",
+						"compression": "gzip",
+						"data_protection": {
+							"name_method": "ENCRYPTION_QAG1",
+							"columns_sensitive": "coddoc",
+							"enabled_ind":"Y"
+						}
+					}
+				},
+				{
+					"transform_id":"2",
+					"load_type": "S3",
+					"load_properties": {
+						"bucket": "s3://interbank-datalake-dev-us-east-1-229029298957-landing/frmk4/test/data/file",
+						"name": "perfil_transicion_pqr",
+						"format": "parquet",
+						"data_protection": {
+							"name_method": "ENCRYPTION_NQH",
+							"columns_sensitive": "coddoc,perfil",
+							"enabled_ind":"Y"
+						}
+					}
+				},
+				{
+					"transform_id":"1",
+					"load_type": "athena",
+					"load_properties": {
+						"schema": "d_perm_aws",
+						"table": "t_perfil_transicion_abc",
+						"bucket": "s3://interbank-datalake-dev-us-east-1-229029298957-landing/frmk4/test/data/d_perm_aws/t_perfil_transicion_abc",
+						"format": "parquet",
+						"partitions":"codmes",
+						"data_protection": {
+							"name_method": "ENCRYPTION_UJQ",
+							"columns_sensitive": "coddoc",
+							"enabled_ind":"Y"
+						}
+					}
+				},
+				{
+					"load_type": "redshift",
+					"load_properties": {
+						"data_connection": "redshift-cnx-dwh-modernizacion-01",
+						"database": "abc",
+						"schema": "bfqgsa",
+						"table": "t_perfil_transicion_abc"
+					}
+				},
+				{
+					"load_type": "teradata",
+					"load_properties": {
+						"data_connection": "teradata-cnx-dwh-01",
+						"database": "abc",
+						"schema": "bfqgsa",
+						"table": "t_perfil_transicion_abc"
+					}
+				}
+			]
+		}
+	]
+}

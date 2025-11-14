@@ -1,0 +1,32 @@
+from utils.others.helper_functions import get_name_function
+
+class LoadTeradata:
+    def __init__(self, spark, config, logger):
+        self.spark = spark
+        self.config = config
+        self.logger = logger
+
+    def run(self, df):
+        
+        # Obtener el nombre de esta funcion para usarlo en los logs
+        name_function = get_name_function()
+        
+        # Destino
+        self.origen = {
+            "local-new-egde": False,
+            "local-ec2": True,
+            "s3": False
+        }        
+        
+        if self.origen.get("local-new-egde", False):
+            # New Egde
+            path = "/data/desa/IBKProjects/DataHub/frmk4/tmp/outputs/output_teradata/"
+        elif self.origen.get("local-ec2", False):
+            # AWS - EC2
+            path = "/home/ubuntu/frmk4/tmp/outputs/output_teradata/"
+        elif self.origen.get("s3", False):
+            # AWS - s3
+            path = f"s3://.../data.output_teradata/"
+        
+        self.logger.registrar("INFO",f"[{name_function}] - Guardando resultados: {path}")
+        df.write.mode("overwrite").parquet(path)
