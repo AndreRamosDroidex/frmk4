@@ -5,14 +5,6 @@ from pyspark.sql import DataFrame
 from utils.others.helper_functions import get_name_function
 
 class Transformer:
-    """
-    Ejecuta TODAS las transformaciones declaradas en process_modules.transform.
-    - Soporta transform_type: "code" (SQL inline) o "file" (lee .sql desde path_transform_sql).
-    - Si no viene transform_type: autodetecta por extensión (.sql => file; else => code).
-    - Ejecuta las transforms en PARALELO (ThreadPoolExecutor) y materializa con .count().
-    - Devuelve (dfs_by_id, last_df).
-    """
-
     def __init__(self, sparkSession, config):
         self.spark = sparkSession
         self.config = config
@@ -30,13 +22,6 @@ class Transformer:
 
     # on_cloud/transform/transformer.py  (solo este método cambia)
     def _load_sql_text(self, sql_or_filename: str, ttype: str) -> str:
-        """
-        Política:
-        - ttype == 'file'  -> buscar el archivo en path_transform_sql
-        - ttype == 'code'  -> usar inline
-        - ttype is None    -> por defecto 'code' (inline), NO intentar archivo
-        """
-        # DEFAULT -> code
         effective_type = (ttype or "code").lower()
 
         if effective_type == "file":
@@ -48,8 +33,6 @@ class Transformer:
             with open(file_path, "r", encoding="utf-8") as f:
                 return f.read()
         else:
-            # Si no vino ttype y el valor termina en .sql, lo tratamos igual como inline
-            # y dejamos un warning informativo para evitar confusiones.
             if ttype is None and isinstance(sql_or_filename, str) and sql_or_filename.lower().endswith(".sql"):
                 self.log.registrar(
                     "WARNING",
@@ -60,16 +43,10 @@ class Transformer:
 
 
     def _execute_one_transform(self, t_id: str, sql_text: str) -> Tuple[str, DataFrame, int]:
-        """
-        Ejecuta una transformación:
-        - registra vista tx_<id>
-        - cachea el DF
-        - materializa con count (retorna cantidad)
-        """
         # Reemplazar el token de entrada por la vista base
         query = sql_text.replace("{{SOURCE_INPUT}}", "source_table")
 
-        # Ejecutar SQL (lazy)
+        # Ejecutar SQL
         df_t = self.spark.sql(query)
 
         # Cache para acelerar usos posteriores y permitir materialización concurrente
@@ -84,12 +61,6 @@ class Transformer:
 
     # ---------------- public API ----------------
     def run(self, df_input: DataFrame) -> Tuple[Dict[str, DataFrame], DataFrame]:
-        """
-        Ejecuta TODAS las transforms en paralelo.
-        Retorna:
-          - dict { transform_id: DataFrame }
-          - último DataFrame (por orden de aparición en config)
-        """
         name_function = get_name_function()
         self.log.registrar("INFO", f"[{name_function}] - Module Transformer (parallel)")
 
@@ -100,7 +71,7 @@ class Transformer:
         # Vista base disponible para todos los SQL (Dataframe Base Original)
         df_input.createOrReplaceTempView("source_table")
 
-        # Prepara tareas
+        #tareas
         tasks: List[Tuple[str, str]] = []
         order_ids: List[str] = []
         for i, tcfg in enumerate(transforms, start=1):

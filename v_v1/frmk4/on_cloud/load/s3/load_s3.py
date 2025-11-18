@@ -29,15 +29,6 @@ class LoadS3:
         self.logger = logger
 
     def run(self, df: DataFrame, props: dict):
-        """
-        props esperados (algunos opcionales):
-          bucket: s3://bucket/prefix
-          name:   subcarpeta destino (opcional)
-          format: parquet | csv | json | text  (default: parquet)
-          compression: gzip|snappy|…  (opcional)
-          partitions: "col1,col2" ó ["col1","col2"] (opcional)
-          mode: overwrite|append|ignore|errorifexists (default overwrite)
-        """
         name_function = get_name_function()
 
         bucket = props.get("bucket")

@@ -43,7 +43,21 @@
 					"port":"1025",
 					"connection_url":"jdbc:teradata://{{server}}/DATABASE={{database}},DBS_PORT={{port}},LOB_SUPPORT=ON,CHARSET=UTF8"
 					}
+		},
+		{ "name": "transform", "properties": { "parallelism": 2 } },
+		{
+		"name": "postgres-cnx-01",
+		"properties": {
+					"username": "demo",
+					"password": "demo",
+					"driver": "org.postgresql.Driver",
+					"server": "localhost",
+					"port": "5432",
+					"database": "frmk4_demo",
+					"connection_url": "jdbc:postgresql://{{server}}:{{port}}/{{database}}"
+				}
 		}
+
 	
 	]
 

@@ -6,27 +6,15 @@ from load.teradata.load_teradata import LoadTeradata
 from utils.others.helper_functions import get_name_function
 
 class Loader:
-    """
-    Orquestador de cargas.
-    - Lee process_modules.load
-    - Para cada item usa el DataFrame según transform_id (si viene).
-    - Soporta S3 / Redshift / Teradata (Athena mapeado a S3 como POC).
-    - Mantiene compat: .run(df) ejecuta con un único DF.
-    """
-
     def __init__(self, sparkSession, config):
         self.spark = sparkSession
         self.config = config
         self.log = config.log
 
-        # Instancias de loaders
         self._s3 = LoadS3(self.spark, self.config, self.log)
         self._rs = LoadRedshift(self.spark, self.config, self.log)
         self._td = LoadTeradata(self.spark, self.config, self.log)
 
-    # ----------------------------
-    # Compatibilidad legacy: un DF
-    # ----------------------------
     def run(self, df: DataFrame):
         """
         MODO LEGACY: ejecuta todos los loads usando un único DataFrame.
@@ -46,16 +34,8 @@ class Loader:
 
         self.log.registrar("INFO", f"[{name_function}] - Finalización Load (compat).")
 
-    # ------------------------------------
-    # Nuevo: múltiples DFs por transform_id
-    # ------------------------------------
+    # múltiples DFs por transform_id
     def run_many(self, dfs_by_id: Dict[str, DataFrame], df_fallback: Optional[DataFrame] = None):
-        """
-        Ejecuta cargas respetando transform_id:
-        - Si el item de 'load' tiene 'transform_id', usa dfs_by_id[transform_id].
-        - Si no tiene 'transform_id', usa df_fallback; si no hay fallback, usa
-          el último DF del dict (orden por clave).
-        """
         name_function = get_name_function()
         self.log.registrar("INFO", f"[{name_function}] - Loader.run_many (multi-transform)")
 
@@ -101,9 +81,7 @@ class Loader:
 
         self.log.registrar("INFO", f"[{name_function}] - Finalización Load (multi-transform).")
 
-    # ----------------------------
-    # Interno: enrutamiento loader
-    # ----------------------------
+    #enrutamiento loader
     def _dispatch_load(self, ltype: str, df: DataFrame, props: dict, name_function: str, transform_id: Optional[str]):
         tag = f"transform_id={transform_id}" if transform_id else "transform_id=<default>"
         self.log.registrar("INFO", f"[{name_function}] - Ejecutando load_type={ltype} ({tag})")

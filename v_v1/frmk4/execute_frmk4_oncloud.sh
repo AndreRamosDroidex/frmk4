@@ -30,6 +30,8 @@ PATH_PROJECT=$(dirname "$(realpath "$0")")
 export SPARK_HOME=${PATH_PROJECT}/spark-3.5.6-bin-hadoop3
 export PATH=$SPARK_HOME/bin:$PATH
 
+EXTRA_PACKAGES=${EXTRA_PACKAGES:-org.postgresql:postgresql:42.7.4}
+
 
 ## On-Premise ##
 # Esto se agrego para utilizar los modulos en los worker del spark
@@ -37,4 +39,5 @@ export PYTHONPATH=$PYTHONPATH:${PATH_PROJECT}/on_cloud
 
 sh ${SPARK_HOME}/bin/spark-submit \
   --master local[*] \
+  --packages "$EXTRA_PACKAGES" \ 
   ${PATH_PROJECT}/on_cloud/main.py ${ID_TRACKING} ${BATCH_ID} ${FECINFORMACION}
