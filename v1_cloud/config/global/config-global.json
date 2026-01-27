@@ -1,0 +1,50 @@
+{
+  "framework": "FRMK4",
+  "config_app": [
+    {
+      "name": "spark-config",
+      "properties": {
+        "spark.ui.enabled": "false",
+        "spark.sql.shuffle.partitions": "200",
+        "spark.sql.execution.arrow.pyspark.enabled": "true",
+        "spark.driver.memory": "4g",
+        "spark.driver.cores": "2",
+        "spark.sql.session.timeZone": "America/Lima",
+        "spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version": "2"
+      }
+    },
+    {
+      "name": "paths",
+      "properties": {
+        "path_data_onprem": "/data/desa/IBKProjects/DataHubFrmk4/frmk/tmp/inputs/processed-onprem",
+        "path_transform_sql": "/data/desa/IBKProjects/DataHubFrmk4/frmk/tmp/sql",
+        "path_outputs": "/data/desa/IBKProjects/DataHubFrmk4/frmk/tmp/outputs"
+      }
+    },
+    {
+      "name": "teradata-cnx-dwh-01",
+      "properties": {
+        "username": "D_DWH_FRMING",
+        "password": "FR3Dv#Rtw7",
+        "driver": "com.teradata.jdbc.TeraDriver",
+        "server": "10.11.240.31",
+        "database": "D_DWH_FRMING",
+        "port": "1025",
+        "connection_url": "jdbc:teradata://{{server}}/DATABASE={{database}},DBS_PORT={{port}},CHARSET=UTF8,LOGMECH=LDAP,TMODE=TERA,ENCRYPTDATA=ON,TYPE=FASTLOAD"
+      }
+    },
+    {
+      "name": "postgres-cnx-01",
+      "properties": {
+        "username": "demo",
+        "password": "demo",
+        "driver": "org.postgresql.Driver",
+        "server": "localhost",
+        "port": "5432",
+        "database": "frmk4_demo",
+        "connection_url": "jdbc:postgresql://{{server}}:{{port}}/{{database}}"
+      }
+    },
+    { "name": "transform", "properties": { "parallelism": 2 } }
+  ]
+}

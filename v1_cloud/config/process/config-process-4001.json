@@ -1,0 +1,78 @@
+{
+  "user_developer_id": "S38371",
+  "user_technical_leader_id": "S38371",
+  "user_team": "campañas_contextuales",
+  "batch_id": "0001",
+  "process_type": "CM",
+  "email_notification": {
+    "error": "correo1@intercorp.com.pe,correo2@intercorp.com.pe,correo3@intercorp.com.pe",
+    "warning": "correo1@intercorp.com.pe",
+    "ok": "correo2@intercorp.com.pe"
+  },
+  "process_modules": [
+    {
+      "transform": [
+        {
+          "transform_id": "1",
+          "transform_sql": "SELECT codmes, coddoc, perfil FROM {{SOURCE_INPUT}}"
+        },
+        {
+          "transform_id": "2",
+          "transform_type": "file",
+          "transform_sql": "perfil_transicion.sql"
+        }
+      ]
+    },
+    {
+      "load": [
+        {
+          "load_type": "teradata",
+          "load_properties": {
+            "connection_name": "teradata-cnx-dwh-01",
+            "dbtable": "D_DW_LANDING.personas_obj_raw",
+            "mode": "append"          
+          }
+        },
+        {
+          "transform_id": "2",
+          "load_type": "teradata",
+          "load_properties": {
+            "connection_name": "teradata-cnx-dwh-01",
+            "dbtable": "D_DW_LANDING.personas_obj_trx",
+            "mode": "append"
+          }
+        },
+				{
+					"transform_id":"1",
+					"load_type": "S3",
+					"load_properties": {
+						"bucket": "s3://interbank-datalake-dev-us-east-1-058528764918-stage/pre-stage/analytics/d_datalake",
+						"name": "perfil_transicion_abc",
+						"format": "text",
+						"extension":"csv",
+						"delimiter": "|",
+						"header":"y",
+						"compression": "gzip",
+						"error_continue": "y",
+						"data_protect_columns": {
+							"type": "volt-sha-256",
+							"columns": "coddoc,perfil"
+						}
+					}
+				},
+				{
+					"load_type": "athena",
+					"load_properties": {
+						"schema": "d_datalake_perm",
+						"table": "t_perfil_transicion_abc",
+						"error_continue": "y",
+						"data_protect_columns": {
+							"type": "volt-sha-256",
+							"columns": "coddoc,perfil"
+						}
+					}
+				}
+      ]
+    }
+  ]
+}
