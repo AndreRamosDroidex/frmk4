@@ -1,0 +1,42 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "Lambda Invoke",
+  "States": {
+    "Lambda Invoke": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:{{DEPLOY_REGION}}:{{TARGET_ACCOUNT}}:function:aw-{{ENV}}-lm-{{PROJECT}}-initilize-01:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 3,
+          "BackoffRate": 2,
+          "JitterStrategy": "FULL"
+        }
+      ],
+      "Next": "EMR Serverless StartJobRun"
+    },
+    "EMR Serverless StartJobRun": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::emr-serverless:startJobRun.sync",
+      "Parameters": {
+        "ApplicationId.$": "$.applicationId",
+        "ExecutionRoleArn.$": "$.executionRoleArn",
+        "Name.$": "$.jobName",
+        "JobDriver.$": "$.jobDriver"
+      },
+      "End": true
+    }
+  },
+  "QueryLanguage": "JSONPath"
+}

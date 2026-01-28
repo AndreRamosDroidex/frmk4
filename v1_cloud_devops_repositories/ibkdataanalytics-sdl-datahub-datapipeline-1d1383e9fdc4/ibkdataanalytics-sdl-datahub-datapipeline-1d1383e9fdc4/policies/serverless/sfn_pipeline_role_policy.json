@@ -1,0 +1,52 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "LambdaInvoke",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "EMRSteps",
+            "Effect": "Allow",
+            "Action": [
+                "elasticmapreduce:AddJobFlowSteps",
+                "elasticmapreduce:DescribeStep",
+                "elasticmapreduce:DescribeCluster"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "CloudWatchLogs",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogDelivery",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutLogEvents",
+                "logs:CreateLogStream",
+                "logs:CreateLogGroup"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "events:PutRule",
+                "events:PutTargets",
+                "events:DescribeRule",
+                "events:DeleteRule",
+                "iam:PassRole",
+                "states:CreateStateMachine",
+                "states:UpdateStateMachine",
+                "states:DeleteStateMachine"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

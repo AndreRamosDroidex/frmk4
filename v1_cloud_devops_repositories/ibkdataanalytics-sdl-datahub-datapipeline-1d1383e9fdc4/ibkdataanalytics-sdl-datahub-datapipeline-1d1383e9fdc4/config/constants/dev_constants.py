@@ -1,0 +1,10 @@
+""" Global constants and environment configuration for the AWS Dev platform."""
+
+ORG = "ibk"
+TEAM= "da"
+PROJECT = "sdl"
+REGION="us-east-1"
+ACCOUNT_ID="058528764918"
+NETWORKING_CONFIG = "parameter-store"
+NETWORKING_VPC_ID = "/aw/dev/ssm/sdl/vpc/01"
+NETWORKING_SUBNETS_APP_ID = "/aw/dev/ssm/sdl/subnets/private/app/id/01"
