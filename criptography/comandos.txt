@@ -1,0 +1,26 @@
+docker run --rm --platform=linux/amd64 \
+  -v "$PWD":/work -w /work \
+  python:3.11-slim bash -lc '
+    apt-get update &&
+    apt-get install -y tar gzip &&
+    python -m venv environment &&
+    . environment/bin/activate &&
+    pip install -U pip &&
+    pip install cryptography pandas pyarrow numpy &&
+    deactivate &&
+    tar -czf pyspark_venv.tar.gz -C environment .
+  '
+
+
+docker run --rm --platform=linux/amd64 \
+  -v "$PWD":/work -w /work \
+  python:3.11-slim bash -lc '
+    apt-get update &&
+    apt-get install -y zip &&
+    python -m venv environment &&
+    . environment/bin/activate &&
+    pip install -U pip &&
+    pip install cryptography pandas pyarrow numpy &&
+    cd environment &&
+    zip -r ../pyspark_venv.zip . -q
+  '
